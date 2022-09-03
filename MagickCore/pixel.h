@@ -221,6 +221,8 @@ extern MagickExport ChannelType
 extern MagickExport MagickBooleanType
   ExportImagePixels(const Image *,const ssize_t,const ssize_t,const size_t,
     const size_t,const char *,const StorageType,void *,ExceptionInfo *),
+  ExportImagePixelsPadded(const Image *,const ssize_t,const ssize_t,const size_t,
+    const size_t,const char *,const StorageType,void *,int,ExceptionInfo *),
   ImportImagePixels(Image *,const ssize_t,const ssize_t,const size_t,
     const size_t,const char *,const StorageType,const void *,ExceptionInfo *),
   InterpolatePixelChannel(const Image *magick_restrict,const CacheView_ *,

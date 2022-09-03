@@ -508,7 +508,7 @@ MagickExport MagickRealType EncodePixelGamma(const MagickRealType pixel)
 
 static MagickBooleanType ExportCharPixel(const Image *image,
   const RectangleInfo *roi,const char *magick_restrict map,
-  const QuantumType *quantum_map,void *pixels,ExceptionInfo *exception)
+  const QuantumType *quantum_map,void *pixels,int row_pad,ExceptionInfo *exception)
 {
   const Quantum
     *magick_restrict p;
@@ -540,6 +540,7 @@ static MagickBooleanType ExportCharPixel(const Image *image,
           *q++=ScaleQuantumToChar(GetPixelRed(image,p));
           p+=GetPixelChannels(image);
         }
+        q+=row_pad;
       }
       return(y < (ssize_t) roi->height ? MagickFalse : MagickTrue);
     }
@@ -558,6 +559,7 @@ static MagickBooleanType ExportCharPixel(const Image *image,
           *q++=ScaleQuantumToChar(GetPixelAlpha(image,p));
           p+=GetPixelChannels(image);
         }
+        q+=row_pad;
       }
       return(y < (ssize_t) roi->height ? MagickFalse : MagickTrue);
     }
@@ -576,6 +578,7 @@ static MagickBooleanType ExportCharPixel(const Image *image,
           *q++=ScaleQuantumToChar((Quantum) 0);
           p+=GetPixelChannels(image);
         }
+        q+=row_pad;
       }
       return(y < (ssize_t) roi->height ? MagickFalse : MagickTrue);
     }
@@ -591,6 +594,7 @@ static MagickBooleanType ExportCharPixel(const Image *image,
           *q++=ScaleQuantumToChar(ClampToQuantum(GetPixelIntensity(image,p)));
           p+=GetPixelChannels(image);
         }
+        q+=row_pad;
       }
       return(y < (ssize_t) roi->height ? MagickFalse : MagickTrue);
     }
@@ -608,6 +612,7 @@ static MagickBooleanType ExportCharPixel(const Image *image,
           *q++=ScaleQuantumToChar(GetPixelBlue(image,p));
           p+=GetPixelChannels(image);
         }
+        q+=row_pad;
       }
       return(y < (ssize_t) roi->height ? MagickFalse : MagickTrue);
     }
@@ -626,6 +631,7 @@ static MagickBooleanType ExportCharPixel(const Image *image,
           *q++=ScaleQuantumToChar(GetPixelAlpha(image,p));
           p+=GetPixelChannels(image);
         }
+        q+=row_pad;
       }
       return(y < (ssize_t) roi->height ? MagickFalse : MagickTrue);
     }
@@ -644,6 +650,7 @@ static MagickBooleanType ExportCharPixel(const Image *image,
           *q++=ScaleQuantumToChar((Quantum) 0);
           p+=GetPixelChannels(image);
         }
+        q+=row_pad;
       }
       return(y < (ssize_t) roi->height ? MagickFalse : MagickTrue);
     }
@@ -1961,9 +1968,9 @@ static MagickBooleanType ExportShortPixel(const Image *image,
   return(y < (ssize_t) roi->height ? MagickFalse : MagickTrue);
 }
 
-MagickExport MagickBooleanType ExportImagePixels(const Image *image,
+MagickExport MagickBooleanType ExportImagePixelsPadded(const Image *image,
   const ssize_t x,const ssize_t y,const size_t width,const size_t height,
-  const char *map,const StorageType type,void *pixels,ExceptionInfo *exception)
+  const char *map,const StorageType type,void *pixels, int row_pad, ExceptionInfo *exception)
 {
   MagickBooleanType
     status;
@@ -2099,7 +2106,7 @@ MagickExport MagickBooleanType ExportImagePixels(const Image *image,
   {
     case CharPixel:
     {
-      status=ExportCharPixel(image,&roi,map,quantum_map,pixels,exception);
+      status=ExportCharPixel(image,&roi,map,quantum_map,pixels,row_pad,exception);
       break;
     }
     case DoublePixel:
@@ -2141,6 +2148,12 @@ MagickExport MagickBooleanType ExportImagePixels(const Image *image,
   }
   quantum_map=(QuantumType *) RelinquishMagickMemory(quantum_map);
   return(status);
+}
+
+MagickExport MagickBooleanType ExportImagePixels(const Image *image,
+  const ssize_t x,const ssize_t y,const size_t width,const size_t height,
+  const char *map,const StorageType type,void *pixels,ExceptionInfo *exception) {
+  return ExportImagePixelsPadded(image, x, y, width, height, map, type, pixels, 0, exception);
 }
 
 /*

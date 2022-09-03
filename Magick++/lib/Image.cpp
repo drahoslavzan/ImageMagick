@@ -4953,10 +4953,10 @@ void Magick::Image::write(Blob *blob_,const std::string &magick_,
 
 void Magick::Image::write(const ssize_t x_,const ssize_t y_,
   const size_t columns_,const size_t rows_,const std::string &map_,
-  const StorageType type_,void *pixels_)
+  const StorageType type_,void *pixels_, int row_pad_)
 {
   GetPPException;
-  ExportImagePixels(image(),x_,y_,columns_,rows_,map_.c_str(),type_,pixels_,
+  ExportImagePixelsPadded(image(),x_,y_,columns_,rows_,map_.c_str(),type_,pixels_,row_pad_,
     exceptionInfo);
   ThrowImageException;
 }

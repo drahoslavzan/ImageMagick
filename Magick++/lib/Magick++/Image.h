@@ -1495,7 +1495,7 @@ namespace Magick
     // image.write( 0, 0, 640, 1, "RGB", 0, pixels );
     void write(const ::ssize_t x_,const ::ssize_t y_,const size_t columns_,
       const size_t rows_,const std::string &map_,const StorageType type_,
-      void *pixels_);
+      void *pixels_, int row_pad_ = 0);
 
     // Write single image frame to a file
     void write(const std::string &imageSpec_);
